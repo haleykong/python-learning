@@ -9,7 +9,8 @@
 
 # SCOPE = the region that a variable is recognized
 # - A variable is only available from inside the region it is created
-# - A global and locally scoped versions of the variable can be created
+# - Local scope = available only inside the function
+# - Global scope = available inside and outside the function
 
 ###############################################################################
 # MULTIPLE ASSIGNMENT
@@ -178,3 +179,210 @@ def hello(first, middle, last):
 
 
 hello(last="Code", middle="Dude", first="Bro")
+
+###############################################################################
+# ARGS
+#
+# *args = parameter that will pack all arguments into a tuple
+# - Useful so that a function can accept a varying amount of positional
+# arguments
+#
+# **kwargs = parameter that will pack all arguments into a dictionary
+# - useful so that a function can accept a varying amount of keyword arguments
+
+
+def add(*args):
+    sum = 0
+    for i in args:
+        sum += 1
+    return sum
+
+
+def hello(**kwargs):
+    print("Hello " + kwargs['first'] + " " + kwargs['last'])
+
+
+print(add(1, 2, 3, 4, 5))
+print(hello(first="Bro", middle="Dude", last="Code"))
+
+###############################################################################
+# STRING FORMAT
+#
+# str.format() = optional method that gives users more control when displaying
+# output
+
+animal = "cow"
+item = "moon"
+
+print("The {} jumped over the {}".format(animal, item))
+print("The {1} jumped over the {0}".format(animal, item))  # positional arg
+print("The {item} jumped over the {animal}".format(animal="cow", item="moon"))
+
+# PADDING
+name = "Bro"
+
+print("Hello, my name is {:10}. Nice to meet you".format(name))
+
+# Left align within padding
+print("Hello, my name is {:<10}. Nice to meet you".format(name))
+
+# Right align within padding
+print("Hello, my name is {:>10}. Nice to meet you".format(name))
+
+# Center align within padding
+print("Hello, my name is {:^10}. Nice to meet you".format(name))
+
+number = 1000
+
+# Truncate and round to the number digits specified
+print("The number is {:.3f}".format(number))
+
+# Add comment to all 1000th places
+print("The number is {:,}".format(number))
+
+# Display binary representation
+print("The number is {:b}".format(number))
+
+# Display octal representation
+print("The number is {:o}".format(number))
+
+# Display hexidecimal representation
+print("The number is {:x}".format(number))  # lowercase
+print("The number is {:X}".format(number))  # uppercase
+
+# Display in scientific notation
+print("The number is {:e}".format(number))  # lowercase
+print("The number is {:E}".format(number))  # uppercase
+
+###############################################################################
+# RANDOM MODULE
+#
+import random
+
+x = random.randint(1, 6)  # Generate random integer
+y = random.random()  # Generate random float
+
+myList = ['rock', 'paper', 'scissors']
+z = random.choice(myList)  # Generates random choice from list
+random.shuffle(myList)  # Shuffle the list
+
+###############################################################################
+# EXCEPTION HANDLING
+#
+# EXCEPTION - events deteected during execution that interrupt the flow of a
+# program
+# - Not good practice to have single except block to handle all exceptions
+# - Better to handle individual exceptions
+
+try:
+    numerator = int(input("Enter a number to divide: "))
+    denominator = int(input("Enter a number to divide by: "))
+    result = numerator / denominator
+except ZeroDivisionError as e:
+    print(e)  # Print exception
+    print("You can't divide by zero!")
+except ValueError as e:
+    print(e)
+    print("Enter only numbers plz")
+except Exception as e:  # General exceptions
+    print(e)
+    print("Something went wrong :(")
+else:  # If no exception
+    print(result)
+finally:  # Regardless of if there was an exception
+    print("This will always execute")
+
+###############################################################################
+# FILES
+#
+import os  # Included in standard Python library
+
+path = "/Users/haleykong/TEST"
+
+if os.path.exists(path):
+    print("That location exists!")
+    if os.path.isfile(path):
+        print("That is a file")
+    elif os.path.isdir(path):
+        print("That is a directory")
+else:
+    print("That location doesn't exist!")
+
+# READ A FILE
+try:
+    # Closes a file but does not handle errors
+    with open('/Users/haleykong/TEST') as file:
+        print(file.read())
+except FileNotFoundError:
+    print("That file was not found :(")
+
+print(file.closed)  # Check if file is closed
+
+# ----------------------------------------------------------------------------
+# WRITE A FILE
+# r = read mode
+# w = write mode
+# a = append mode
+text = "Yooooo\nThis is some text\nHave a good one!\n"
+
+with open('/Users/haleykong/TEST', 'w') as file:
+    file.write(text)
+
+# ----------------------------------------------------------------------------
+# COPY A FILE
+# copyfile() = copies contents of a file
+# copy() = copyfile() + permission mode + destination can be a directory
+# copy2() = copy() + copies metadata (file's creation and modification times)
+import shutil
+
+shutil.copyfile('/Users/haleykong/TEST', '/Users/haleykong/TEST1')  # src, dest
+
+# ----------------------------------------------------------------------------
+# MOVE A FILE
+import os
+
+source = ""
+destination = ""
+
+try:
+    if os.path.exists(destination):
+        print("There is already a file there")
+    else:
+        os.replace(source, destination)
+        print(source + " was moved")
+except FileNotFoundError:
+    print(source + " was not found")
+
+# ----------------------------------------------------------------------------
+# DELETE A FILE
+import os
+import shutil
+
+path = "/Users/haleykong/TEST"
+
+try:
+    os.remove(path)  # Deletes a file, does not remove folders
+    os.rmdir(path)  # Deletes an empty directory
+    shutil.rmtree(path)  # Deletes a directory and all files that it contains
+except FileNotFoundError:
+    print("That file was not found")
+except PermissionError:
+    print("You do not have permission to delete that")
+except OSError:
+    print("You cannot delete that using that function")
+else:
+    print(path + " was deleted")
+
+###############################################################################
+# MODULES
+#
+# MODULE = a file containing python code
+# - May contain functions, classes, etc.
+# - Used with modular programming, which is to separate a program into parts
+# Example 1)
+# import messages as msg
+# msg.hello()
+# Example 2)
+# from messages import hello, bye
+# hello()  # Can call directly
+help("modules")  # Prints available modules
