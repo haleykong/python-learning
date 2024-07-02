@@ -165,6 +165,20 @@ capitals.clear()  # Clear the dictionary
 #
 # RETURN STATEMENT = functions send Python values/objects back to the caller.
 # These values/objects are known as the function's return value.
+#
+# FUNCTION ASSIGNMENT TO VARIABLES
+
+
+def hello():
+    print("Hello")
+
+
+hi = hello  # Get memory address from hello and set it to hi
+hello()
+hi()
+
+say = print
+say("Whoa! I can't believe this works! :O")
 
 ###############################################################################
 # KEYWORD ARGUMENTS
@@ -386,3 +400,1060 @@ else:
 # from messages import hello, bye
 # hello()  # Can call directly
 help("modules")  # Prints available modules
+
+###############################################################################
+# OBJECT-ORIENTED PROGRAMMING
+#
+# OBJECT = instance of a class
+# CLASS = describes attributes and methods (like a blueprint)
+# - Class should be capitalized, can be in main module or separate file
+# ATTRIBUTE = what an object is/has
+# METHOD = what an object can do
+#
+# INSTANCE VARIABLE = declared inside instructor and each object can have
+# unique values assigned
+# CLASS VARIABLE = declared inside of class but outside constructor
+
+
+class Car:
+    # Class variables
+    wheels = 4
+
+    # Special method that will construct objects
+    # Also called the Constructor
+    def __init__(self, make, model, year, color):
+        self.make = make    # instance variable
+        self.model = model  # instance variable
+        self.year = year    # instance variable
+        self.color = color  # instance variable
+
+    # Self = object that is using this method
+    def drive(self):
+        print("This car is driving")
+
+    def stop(self):
+        print("This car is stopped")
+
+
+car_1 = Car("Chevy", "Corvette", 2021, "blue")
+car_1.drive()
+car_1.stop()
+car_1.wheels
+Car.wheels = 2  # Affects all instances of the class
+
+###############################################################################
+# INHERITANCE
+#
+# - Classes can have children
+# - Parent-child relationship where children will inherit from the parents
+# (attributes and methods)
+# - Children classes can implement their own unique attributes and methods
+
+
+class Animal:
+
+    alive = True
+
+    def eat(self):
+        print("This animal is eating")
+
+    def sleep(self):
+        print("This animal is sleeping")
+
+
+# Rabbit is the child class, Animal is the parent class
+class Rabbit(Animal):
+
+    def run(self):
+        print("This rabbit is running")
+
+
+class Fish(Animal):
+
+    def swim(self):
+        print("This fish is swimming")
+
+
+class Hawk(Animal):
+    def fly(self):
+        print("This hawk is flying")
+
+
+rabbit = Rabbit()
+fish = Fish()
+hawk = Hawk()
+
+print(rabbit.alive)
+fish.eat()
+hawk.sleep()
+
+rabbit.run()
+fish.swim()
+hawk.fly()
+
+###############################################################################
+# MULTI-LEVEL INHERITANCE
+#
+# MULTI-LEVEL INHERITANCE = when a derived (child) class inherits another
+# derived (child) class
+
+
+class Organism:
+
+    alive = True
+
+
+class Animal(Organism):
+
+    def eat(self):
+        print("This animal is eating")
+
+
+class Dog(Animal):
+
+    def bark(self):
+        print("This dog is barking")
+
+
+dog = Dog()
+print(dog.alive)    # inherited from the Organism class
+dog.eat()           # inherited from the Animal class
+dog.bark()          # defined in Dog class
+
+###############################################################################
+# MULTIPLE INHERITANCE
+#
+# MULTIPLE INHERITANCE = when a child is derived from more than 1 parent class
+
+
+class Prey:
+
+    def flee(self):
+        print("This animal flees")
+
+
+class Predator:
+
+    def hunt(self):
+        print("This animal is hunting")
+
+
+class Rabbit(Prey):
+    pass
+
+
+class Hawk(Predator):
+    pass
+
+
+class Fish(Prey, Predator):
+    pass
+
+
+rabbit = Rabbit()
+hawk = Hawk()
+fish = Fish()
+
+fish.flee()
+fish.hunt()
+
+###############################################################################
+# METHOD OVERRIDING
+#
+# METHOD OVERRIDING - child class provides a specific implementation of a
+# method that is already provided by one of its parent
+# - Object will use method that is more closely associated with itself
+
+
+class Animal:
+
+    def eat(self):
+        print("This animal is eating")
+
+
+class Rabbit(Animal):
+
+    # Same method signature as Animal class
+    def eat(self):
+        print("This rabbit is eating a carrot")
+
+
+rabbit = Rabbit()
+rabbit.eat()
+
+###############################################################################
+# METHOD CHAINING
+#
+# METHOD CHAINING - calling multiple methods sequentially
+# - Each call performs an action on the same object and returns self
+
+
+class Car:
+
+    def turn_on(self):
+        print("You start the engine")
+        return self
+
+    def drive(self):
+        print("You drive the car")
+        return self
+
+    def brake(self):
+        print("You step on the brakes")
+        return self
+
+    def turn_off(self):
+        print("You turn off the engine")
+        return self
+
+
+car = Car()
+# Notation 1
+car.turn_on()\
+    .drive()\
+    .brake()\
+    .turn_off()
+# Notation 2
+car.turn_on().drive().brake().turn_off()
+
+###############################################################################
+# SUPER FUNCTION
+#
+# super() = Function used to give access to the methods of a parent class
+# - Returns a temporary object of a parent class when used
+
+
+class Rectangle:
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+
+class Square(Rectangle):
+
+    def __init__(self, length, width):
+        # Use the init function from Rectangle class
+        super().__init__(length, width)
+
+    def area(self):
+        return self.length * self.width
+
+
+class Cube(Rectangle):
+
+    def __init__(self, length, width, height):
+        # Use the init function from Rectangle class
+        super().__init__(length, width)
+        self.height = height
+
+    def volume(self):
+        return self.length * self.width * self.height
+
+
+square = Square(3, 3)
+cube = Cube(3, 3, 3)
+
+print(square.area())
+print(cube.volume())
+
+###############################################################################
+# ABSTRACT CLASSES
+#
+# ABSTRACT CLASS = a class which contains one or more abstract methods
+# - prevents a user from creating an object of that class
+# - Compels a user to override abstract methods in a child class
+# ABSTRACT METHOD = a method that has a declaration but does not have an
+# implementation
+
+
+from abc import ABC, abstractmethod  # Abstract Base Class
+
+
+class Vehicle(ABC):
+
+    @abstractmethod
+    def go(self):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+
+class Car(Vehicle):
+
+    def go(self):
+        print("You drive the car")
+
+    def stop(self):
+        print("This car is stopped")
+
+
+class Motorcycle(Vehicle):
+
+    def go(self):
+        print("You ride the motorcycle")
+
+    def stop(self):
+        print("This motorcycle is stopped")
+
+
+# vehicle = Vehicle()
+car = Car()
+motorcycle = Motorcycle()
+
+# vehicle.go()  # Causes an error because Vehicle is an Abstract Class
+car.go()
+motorcycle.go()
+
+car.stop()
+motorcycle.stop()
+
+###############################################################################
+# OBJECTS AS ARGUMENTS
+#
+# - Can pass objects as args to function like with variables
+# - Type of objects may be limited based on required attributes or methods
+
+
+class Car:
+
+    color = None
+
+
+class Motorcycle:
+
+    color = None
+
+
+def change_color(car, color):
+    car.color = color
+
+
+car_1 = Car()
+bike_1 = Motorcycle()
+
+change_color(car_1, "red")
+change_color(bike_1, "black")
+
+print(car_1.color)
+print(bike_1.color)
+
+###############################################################################
+# DUCK TYPING
+#
+# DUCK TYPING = concept where the class of an object is less important than the
+# methods/attributes it might have
+# - Class type is not checked if minimum methods/attributes are present
+# - Based off of the phrase: "If it walks like a duck, and it quacks like a
+# duck, then it must be a duck"
+
+
+class Duck:
+
+    def walk(self):
+        print("This duck is walking")
+
+    def talk(self):
+        print("This duck is qwacking")
+
+
+class Chicken:
+
+    def walk(self):
+        print("This chicken is walking")
+
+    def talk(self):
+        print("This chicken is clucking")
+
+
+class Person():
+
+    def catch(self, duck):
+        duck.walk()
+        duck.talk()
+        print("You caught the critter")
+
+
+duck = Duck()
+chicken = Chicken()
+person = Person()
+
+person.catch(duck)
+person.catch(chicken)
+
+###############################################################################
+# WALRUS OPERATOR :=
+#
+# WALRUS OPERATOR = assigns values to variables as part of a larger expression
+# - Assignment expression
+# - New to Python 3.8
+
+
+print(happy := True)
+
+# Without walrus operator
+foods = list()
+while True:
+    food = input("What food do you like?: ")
+    if food == "quit":
+        break
+    foods.append(food)
+
+# With walrus operator
+foods = list()
+while food := input("What food do you like?: ") != "quit":
+    foods.append(food)
+
+###############################################################################
+# HIGHER ORDER FUNCTION
+#
+# HIGHER ORDER FUNCTION = a function that either:
+# 1. Accepts a function as an argument or
+# 2. Returns a function (In python, functions are also treated as objects)
+
+# Example of 1)
+
+
+def loud(text):
+    return text.upper()
+
+
+def quiet(text):
+    return text.lower()
+
+
+def hello(func):
+    text = func("Hello")
+    print(text)
+
+
+hello(loud)
+hello(quiet)
+
+# Example of 2)
+
+
+def divisor(x):  # Returns the dividend function
+    def dividend(y):
+        return y / x
+    return dividend
+
+
+divide = divisor(2)
+print(divide(10))
+
+###############################################################################
+# LAMBDA FUNCTIONS
+#
+# LAMBDA FUNCTION = function written in 1 line using lambda keyword
+# - Accepts any number of arguments, but only has one expression
+# - Useful if needed for a short period of time, throw-away
+# lambda parameters:expression
+
+# Without lambda
+
+
+def double(x):
+    return x * 2
+
+
+print(double(5))
+
+double = lambda x: x * 2
+multiple = lambda x, y: x * y
+add = lambda x, y, z: x + y + z
+print(double(5))
+
+###############################################################################
+# SORT FUNCTIONS
+#
+# sort() method     = used with lists
+# sorted() function = used with iterables
+# - Can pass in keyword arguments: key and reverse
+
+students = ("Squidward", "Sandy", "Patrick")
+
+students.sort(reverse=True)
+sorted_students = sorted(students, reverse=True)
+
+###############################################################################
+# MAP
+#
+# map() = applies a function to each item in an iterable (list, tuple, etc.)
+# map(function, iterable)
+
+
+store = [("shirt", 20.00),
+         ("pants", 25.00),
+         ("jacket", 50.00),
+         ("socks", 10.00)]
+
+to_euros = lambda data: (data[0], data[1] * 0.82)
+to_dollars = lambda data: (data[0], data[1] / 0.82)
+
+store_dollars = list(map(to_dollars, store))
+
+for i in store_dollars:
+    print(i)
+
+###############################################################################
+# FILTER
+#
+# filter() = creates a collection of elements from an iterable for which a
+# function returns true
+#
+# filter(function, iterable)
+
+
+friends = [("Rachel", 19),
+           ("Monica", 18),
+           ("Phoebe", 17),
+           ("Joey", 16),
+           ("Chandler", 21),
+           ("Ross", 20)]
+
+age = lambda data: data[1] >= 18
+
+drinking_buddies = list(filter(age, friends))
+
+for i in drinking_buddies:
+    print(i)
+
+###############################################################################
+# REDUCE
+#
+# reduce() = apply a function to an iterable and reduce it to a single
+# cumulative value
+# - Performs function on first two elements and repeats process until 1 value
+# remains
+#
+# reduce(function, iterable)
+
+
+import functools
+
+letters = ["H", "E", "L", "L", "O"]
+word = functools.reduce(lambda x, y: x + y, letters)
+print(word)
+
+factorial = [5, 4, 3, 2, 1]
+result = functools.reduce(lambda x, y: x * y, factorial)
+print(result)
+
+###############################################################################
+# LIST COMPREHENSION
+#
+# LIST COMPREHENSION = a way to create a new list with less syntax
+# - Can mimic certain lambda functions, easier to read
+#
+# list = [expression for item in iterable]
+# list = [expression for item in iterable if conditional]
+# list = [expression (if/else) for item in iterable]
+
+
+# No list comprehension
+squares = []                # create an empty list
+for i in range(1, 11):      # create a for loop
+    squares.append(i * i)   # define what each loop iteration should do
+print(squares)
+
+# List comprehension (example 1)
+squares = [i * i for i in range(1, 11)]
+print(squares)
+
+# List comprehension (example 2)
+students = [100, 90, 80, 70, 60, 50, 40, 30, 0]
+passed_students = [i for i in students if i >= 60]
+passed_students2 = [i if i >= 60 else "FAILED" for i in students]
+print(passed_students)
+print(passed_students2)
+
+###############################################################################
+# DICTIONARY COMPREHENSION
+#
+# DICTIONARY COMPREHENSION = create dictionaries using an expression
+# - Can replace for loops and certain lambda functions
+#
+# dictionary = {key: expression for (key, value) in iterable}
+# dictionary = {key: expression for (key, value) in iterable if conditional}
+# dictionary = {key: (if/else) for (key, value) in iterable}
+# dictionary = {key: function(value) for (key, value) in iterable}
+
+# Example 1
+cities_in_F = {'New York': 32, 'Boston': 75, 'Los Angeles': 100, 'Chicago': 50}
+cities_in_C = {key: round((value - 32) * (5 / 9))
+               for (key, value) in cities_in_F.items()}
+print(cities_in_C)
+
+# Example 2
+weather = {'New York': "snowing", 'Boston': "sunny", 'Los Angeles': "sunny"}
+sunny_weather = {key: value for (key, value) in weather.items()
+                 if value == "sunny"}
+print(sunny_weather)
+
+# Example 3
+cities = {'New York': 32, 'Boston': 75, 'Los Angeles': 100, 'Chicago': 50}
+desc_cities = {key: ("WARM" if value >= 40 else "COLD") for (key, value)
+               in cities.items()}
+print(desc_cities)
+
+
+# Example 4
+def check_temp(value):
+    if value >= 70:
+        return "HOT"
+    elif 69 >= value >= 40:
+        return "WARM"
+    else:
+        return "COLD"
+
+
+desc_cities = {key: check_temp(value) for (key, value) in cities.items()}
+print(desc_cities)
+
+###############################################################################
+# ZIP
+#
+# zip(*iterables) = aggregate elements from two or more iterables (list,
+# tuples, sets, etc.)
+# - Creates a zip object with paired elements stored in tuples for each element
+
+usernames = ["Dude", "Bro", "Mister"]
+passwords = ("p@ssword", "abc123", "guest")
+
+users = zip(usernames, passwords)
+
+print(type(users))
+for i in users:
+    print(i)
+
+###############################################################################
+# IF __NAME__
+#
+# if __name__ == '__main__'
+#
+# 1. Module can be run as a standalone program
+# 2. Module can be imported and used by other modules
+#
+# - Python interpreter sets "special variables", one of which is __name__
+# - Python will assign the __name__ variable a value of '__main__' if it's the
+# initial module being run
+# - Checks to see if the file is being run directly or indirectly
+
+import module_two
+print(__name__)             # prints __main__
+print(module_two.__name__)  # prints module_two
+
+###############################################################################
+# TIME MODULE
+#
+# epoch = a date and time from which a computer measures system time (when
+# your computer thinks time began)
+# UTC = Coordinated Universal Time
+# - Primary time standard by which the world regulates clocks and times
+# - Within about 1 second of mean solar time at 0 degrees longitude
+# - Not adjusted for daylight savings time
+
+import time
+
+# Converts a time expressed in seconds since epoch to a readable string
+print(time.ctime(0))
+print(time.time())              # return current seconds since epoch
+print(time.ctime(time.time()))  # get current date and time
+
+time_object = time.localtime()      # create time object with epoch
+time_object_utc = time.gmtime()     # create time object with UTC time
+# use different directives to change formats
+local_time = time.strftime("%B %d %Y %H:%M:%S", time_object)
+
+time_string = "20 April, 2020"
+# parses a string representation of time or date and returns a time object
+time_object = time.strptime(time_string, "%d %B, %Y")
+
+# (year, month, day, hours, minutes, secs, #day of the wk, #day of the yr, dst)
+time_tuple = (2020, 4, 20, 4, 20, 0, 0, 0, 0)
+# takes a time object or a tuple representation
+time_string = time.asctime(time_tuple)
+print(time_string)
+
+###############################################################################
+# THREADING
+#
+# thread = a flow of execution, like a separate order of instructions
+# - Each thread takes a turn running to achieve concurrency
+# - GIL = Global Interpreter Lock, allows only one thread to hold the control
+# of the Python interpreter at any one time
+#
+# CPU bound = program/task spends most of its time waiting for internal events
+# (CPU intensive)
+# - Use multiprocessing
+#
+# IO bound = program/task spends most of its time waiting for external events
+# (user input, web scraping)
+# - Use multithreading (multiple threads using concurrently)
+
+
+import threading
+import time
+
+
+# IO bound because waiting for sleep
+def eat_breakfast():
+    time.sleep(3)
+    print("You eat breakfast")
+
+
+# IO bound because waiting for sleep
+def drink_coffee():
+    time.sleep(4)
+    print("You drank coffee")
+
+
+# IO bound because waiting for sleep
+def study():
+    time.sleep(5)
+    print("You finish studying")
+
+
+# Create additional threads and now can run each task concurrently
+# Main thread creates this
+x = threading.Thread(target=eat_breakfast, args=())
+x.start()
+y = threading.Thread(target=drink_coffee, args=())
+y.start()
+z = threading.Thread(target=study, args=())
+z.start()
+
+# Main thread needs to wait until these threads synchronize
+x.join()
+y.join()
+z.join()
+
+# Main thread
+print(threading.active_count())
+print(threading.enumerate())
+print(time.perf_counter())
+
+###############################################################################
+# DAEMON THREAD
+#
+# DAEMON THREAD = a thread that runs in the background
+# - Not important for a program to run
+# - Program will not wait for daemon threads to complete before exiting
+# - Non-daemon threads cannot normally be killed, they stay alive until task is
+# complete
+#
+# (e.g. background tasks, garbage collection, waiting for input, long-running
+# processes)
+
+
+import threading
+import time
+
+
+def timer():
+    print()
+    print()
+    count = 0
+    while True:
+        time.sleep(1)
+        count += 1
+        print("Logged in for: ", count, "seconds")
+
+
+x = threading.Thread(target=timer, daemon=True)
+x.setDaemon(True)  # Another way to set if daemon
+x.start()
+
+
+answer = input("Do you wish to exit?")
+
+###############################################################################
+# MULTIPROCESSING
+#
+# MULTIPROCESSING - running tasks in parallel on different CPU cores
+# - Bypass GIL used for threading
+# - Multiprocessing - better for CPU bound tasks (heavy CPU usage)
+# - Multithreading - better for IO bound tasks (waiting around)
+
+
+from multiprocessing import Process, cpu_count
+import time
+
+
+def counter(num):
+    count = 0
+    while count < num:
+        count += 1
+
+
+def main():
+    a = Process(target=counter, args=(250000000,))
+    b = Process(target=counter, args=(250000000,))
+    c = Process(target=counter, args=(250000000,))
+    d = Process(target=counter, args=(250000000,))
+
+    a.start()
+    b.start()
+    c.start()
+    d.start()
+
+    a.join()
+    b.join()
+    c.join()
+    d.join()
+
+    print("finished in:", time.perf_counter(), "seconds")
+
+
+# Throws an error because bug requires module to be imported for multiprocess
+if __name__ == '__main__':
+    main()
+
+###############################################################################
+# TKINTER WINDOWS
+#
+# Tkinter = module for GUI toolkit, included with Python
+#
+# widgets = GUI elements: buttons, textboxes, labels, images
+# windows = serves as a container to hold or contain these widgets
+
+
+from tkinter import *
+
+
+window = Tk()  # instantiate an instance of a window
+window.geometry("420x420")
+window.title("Bro Code first GUI program")
+
+# Convert to photo image
+icon = PhotoImage(file='logo.png')  # placeholder filepath
+window.iconphoto(True, icon)
+# Can be text or hexidecimal
+window.config(background="black")
+window.config(background="#5cfcff")
+
+window.mainloop()   # place window on computer screen, listen for events
+
+###############################################################################
+# TKINTER LABELS
+#
+# label = an area widget that holds text and/or an image within a window
+# - Will expand based on widgets
+
+
+from tkinter import *
+
+
+window = Tk()
+
+photo = PhotoImage(file='person.png')  # placeholder filepath
+label = Label(window,
+              text="Hello World",
+              font=('Arial', 40, 'bold'),
+              fg='#00FF00',     # foreground
+              bg='black',       # background
+              relief=RAISED,
+              bd=10,
+              padx=20,          # padding x
+              pady=20,          # padding y
+              image=photo,
+              compound='bottom')  # displays both text and an image
+label.pack()    # add label to window
+# label.place(x=0, y=0)   # place label at designated x and y coordinates
+
+window.mainloop()   # place window on computer screen, listen for events
+
+###############################################################################
+# TKINTER BUTTONS
+#
+# buttons = click it and it does stuff
+
+
+from tkinter import *
+
+
+count = 0
+
+
+def click():
+    global count
+    count += 1
+    print(count)
+
+window = Tk()  # instantiate an instance of a window
+
+photo = PhotoImage(file='like.png') # placeholder filepath
+
+button = Button(window,
+                text="click me!",
+                command=click,  # list function name without parentheses
+                font=("Comic Sans", 30),
+                fg="00FF00",
+                bg="black",
+                activeforeground="00FF00",
+                activebackground="black",
+                state=ACTIVE, # can put active/disabled
+                image=photo,
+                compound='bottom')  # displays both text and image
+
+button.pack()       # display button
+
+window.mainloop()   # place window on computer screen, listen for events
+
+###############################################################################
+# TKINTER ENTRY BOX
+#
+# entry widget = textbox that accepts a single line of user input
+
+
+from tkinter import *
+
+
+def submit():
+    username = entry.get()
+    print("Hello " + username)
+    entry.config(state=DISABLED)
+
+
+def delete():
+    entry.delete(0, END)  # deletes all characters within entry box
+
+
+def backspace():
+    entry.delete(len(entry.get()) - 1, END)
+
+
+window = Tk()
+
+entry = Entry(window,
+              font=("Arial", 50),
+              fg="#00FF00",
+              bg="black",
+              show="*")     # character to show when typing
+entry.insert(0, 'Spongebob')  # default text
+entry.pack(side=LEFT)
+
+submit_button = Button(window, text="submit", command=submit)
+submit_button.pack(side=RIGHT)
+
+delete_button = Button(window, text="delete", command=delete)
+delete_button.pack(side=RIGHT)
+
+backspace_button = Button(window, text="backspace", command=backspace)
+backspace_button.pack(side=RIGHT)
+
+window.mainloop()
+
+###############################################################################
+# TKINTER CHECKBOX
+
+
+from tkinter import *
+
+
+def display():
+    if(x.get() == 1):
+        print("You agree")
+    else:
+        print("You don't agree :( ")
+
+window = Tk()
+
+x = IntVar()    # this is because we are storing a 1 or a 0 for on/off value
+
+python_photo = PhotoImage(file='python.png')    # placeholder filepath
+
+# Stores a 1 or 0 as a result
+check_button = Checkbutton(window,
+                           text="I agree to something",
+                           variable=x,
+                           onvalue=1,   # value when checked
+                           offvalue=0,  # value when unchecked
+                           command=display,
+                           font=('Arial', 20),
+                           fg='#00FF00',
+                           bg='black',
+                           activeforeground='#00FF00',
+                           activebackground='black',
+                           padx=25,
+                           pady=10,
+                           image=python_photo,  # add image to checkbox
+                           # where you are adding the photo in relation to text
+                           compound='left')
+check_button.pack()
+
+window.mainloop()
+
+###############################################################################
+# TKINTER RADIO BUTTONS
+#
+# radio button = can only select one from a group
+
+
+from tkinter import *
+
+food = ["pizza", "hamburger", "hotdog"]
+
+
+def order():
+    if(x.get() == 0):
+        print("You ordered a pizza!")
+    elif(x.get() == 1):
+        print("You ordered a hamburger!")
+    elif(x.get() == 2):
+        print("You ordered a hotdog!")
+    else:
+        print("Huh?")
+
+window = Tk()
+
+# Images need to be created after window instantiation
+pizzaImage = PhotoImage(file='pizza.png')           # placeholder filepath
+hamburgerImage = PhotoImage(file='hamburger.png')   # placeholder filepath
+hotdogImage = PhotoImage(file='hotdog.png')         # placeholder filepath
+foodImages = [pizzaImage, hamburgerImage, hotdogImage]
+
+x = IntVar()
+
+# Iterate through each item in list
+for index in range(len(food)):
+    radiobutton = Radiobutton(window,
+                              # adds text to radio buttons
+                              text=food[index],
+                              # groups radiobuttons together if they share the
+                              # same variable
+                              variable=x,
+                              # assigns each radiobutton a different value
+                              value=index,
+                              # adds padding on x-axis
+                              padx=25,
+                              font=("Impact", 50),
+                              # adds image to radiobutton
+                              image=foodImages[index],
+                              # adds image and text (left side)
+                              compound='left',
+                              # eliminate circle indicators
+                              indicatoron=0,
+                              # sets width of radio buttons
+                              width=375,
+                              # set command of radiobutton to function
+                              command=order
+                              )
+    radiobutton.pack(anchor=W)
+
+window.mainloop()
+
+###############################################################################
+# TKINTER LISTBOX
+#
+# listbox = a listing of selectable text items within its own container
+
+
+from tkinter import *
+
+
+window = Tk()
+
+window.mainloop()
