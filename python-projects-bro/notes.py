@@ -1451,9 +1451,175 @@ window.mainloop()
 # listbox = a listing of selectable text items within its own container
 
 
+def submit():
+    food = []
+
+    # Iterates through each selected item and gets the index and the item at
+    # that index
+    for index in listbox.curselection():
+        food.insert(index, listbox.get(index))
+
+    print("You have ordered: ")
+    for index in food:
+        print(index)
+
+
+def add():
+    listbox.insert(listbox.size(), entryBox.get())
+
+    # Adjust the listbox size once new item is added
+    listbox.config(height=listbox.size())
+
+
+def delete():
+    # Start with last index because deleting from front will change the indices
+    # of the items
+    for index in reversed(listbox.curselection()):
+        listbox.delete(index)
+
+    # Adjust the listbox size once new item is deleted
+    listbox.config(height=listbox.size())
+
+
 from tkinter import *
 
 
 window = Tk()
+
+listbox = Listbox(window,
+                  bg="#f7ffde",
+                  font=("Constantia", 35),
+                  width=12,
+                  selectmode=MULTIPLE)  # Select multiple items from listbox
+listbox.pack()
+
+listbox.insert(1, "pizza")
+listbox.insert(2, "pasta")
+listbox.insert(3, "garlic bread")
+listbox.insert(4, "soup")
+listbox.insert(5, "salad")
+
+listbox.config(height=listbox.size())
+
+entryBox = Entry(window)
+entryBox.pack()
+
+submitButton = Button(window, text="submit", command=submit)
+submitButton.pack()
+
+addButton = Button(window, text="add", command=add)
+addButton.pack()
+
+deleteButton = Button(window, text="delete", command=delete)
+deleteButton.pack()
+
+
+window.mainloop()
+
+###############################################################################
+# TKINTER MESSAGEBOX
+
+
+from tkinter import messagebox  # import messagebox library
+
+
+# Different types of message boxes
+def click():
+    # messagebox.showinfo(title='This is an info message box',
+    #                     message='You are a person')
+    # messagebox.showwarning(title='WARNING!', message='You have A VIRUS!!')
+    # messagebox.showerror(title='ERROR!!', message='Something went wrong')
+
+    # # Returns T/F
+    # if messagebox.askokcancel(title='ask ok cancel',
+    #                     message='Do you want to do the thing?'):
+    #     print("You did a thing!")
+    # else:
+    #     print("You canceled a thing! :(")
+
+    # # Returns T/F
+    # if messagebox.askretrycancel(title='ask retry cancel',
+    #                     message='Do you want to retry the thing?'):
+    #     print("You retried a thing!")
+    # else:
+    #     print("You canceled a thing! :(")
+
+    # # Returns T/F
+    # if messagebox.askyesno(title='ask yes or no', message='Do you like cake?'):
+    #     print("I like cake too :)")
+    # else:
+    #     print("Why do you not like cake? :(")
+
+    # # Returns 'yes' or 'no' string
+    # answer = messagebox.askquestion(title='ask question',
+    #                                 message='Do you like pie?')
+    # if (answer == 'yes'):
+    #     print('I like pie too :) ')
+    # else:
+    #     print('Why do you not like pie? :(')
+
+    # Returns True, False, or None
+    answer = messagebox.askyesnocancel(title='yes no cancel',
+                                       message='Do you like to code?',
+                                       icon='warning')
+    if (answer == True):
+        print("You like to code :)")
+    elif (answer == False):
+        print("Then why are you watching a video on coding?")
+    else:
+        print("You have dodged the question")
+
+window = Tk()
+
+button = Button(window, command=click, text='Click Me')
+button.pack()
+
+window.mainloop()
+
+###############################################################################
+# TKINTER COLOR CHOOSER
+
+
+from tkinter import *
+from tkinter import colorchooser  # submodule
+
+
+def click():
+    color = colorchooser.askcolor()     # provides tuple of RGB and Hex
+    colorRGB = color[0]
+    colorHex = color[1]
+    window.config(bg=colorHex)          # change background color
+
+
+window = Tk()
+window.geometry("420x420")
+
+button = Button(text='Click Me', command=click)
+button.pack()
+
+window.mainloop()
+
+###############################################################################
+# TKINTER TEXT AREA
+#
+# text widget = enter multiple lines of text, functions like a text area
+
+
+from tkinter import *
+
+
+def submit():
+    input = text.get("1.0", END)    # get first line to end
+    print(input)
+
+window = Tk()
+
+text = Text(window,
+            bg="light yellow",
+            font=("Ink Free", 25))
+text.pack()
+
+button = Button(window, text="submit", command=submit)
+button.pack()
 
 window.mainloop()
