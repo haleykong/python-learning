@@ -249,6 +249,107 @@ def string_rotation(s1, s2):
 # Time Complexity: O(N) if we assume isSubstring runs in O(A+ B) time where
 # A is the length of s1 and B is the length of s2
 
+###############################################################################
+# 2.1 REMOVE DUPS - Remove duplicates from unsorted linked list
+
+# Notes - iterate through linked list, adding each element to dictionary
+# When there is a duplicate element, remove the element and continue iterating.
+
+
+class ListNode():
+
+    def __init__(self, val, next_node=None):
+        self.val = val
+        self.next = next_node
+
+
+def remove_dups(n: ListNode):
+    elements = {}
+
+    previous = ListNode()
+
+    while n:
+        # Duplicate exists
+        if n.val in elements:
+            previous.next = n.next
+        else:
+            elements[n.val] = 1
+            previous = n
+        n = n.next
+
+# Time Complexity: O(N) where N is the number of elements in the linked list
+# Notes - If there is no buffer, there can be two pointers:
+# - current - iterates through linked list
+# - runner - checks subsequent nodes for duplicates
+
+###############################################################################
+# 2.2 RETURN KTH TO LAST - Find the kth to last element of a singly linked list
+
+# Recursive Solution: Create wrapper function
+
+
+index = 0
+
+
+def returnKthToLast(head: ListNode, k: int):
+    return returnKthToLast(head, k, index)
+
+
+def returnKthToLastWrapper(head: ListNode, k: int, index: int):
+    if not head:
+        return None
+
+    node = returnKthToLastWrapper(head.next, k, index)
+    index += 1
+    if index == k:
+        return head
+
+    return node
+
+# Space Complexity: O(n) - due to recursive calls
+
+# Iterative Solution: Place two pointers (p1 and p2) k nodes apart and move
+# them at the same pace. p2 will be at the beginning and p1 will be k nodes
+# into the list
+
+
+def returnKthToLastIterative(head: ListNode, k: int):
+    p1 = head
+    p2 = head
+
+    # Move p1 k nodes into the list
+    for i in range(k):
+        if not p1:
+            return None
+        p1 = p1.next
+
+    # Move pointers at same pace. When p1 hits the end, p2 will be at the
+    # correct element
+    while p1:
+        p1 = p1.next
+        p2 = p2.next
+
+    return p2
+
+# Time Complexity: O(n)
+# Space Complexity: O(1)
+
+###############################################################################
+# 2.3 DELETE MIDDLE NODE - delete a node in the middle of a singly linked list
+# given only access to that node
+
+# Notes - Copy the data from the next node over to the current node and then
+# delete the next node
+
+
+def deleteMiddleNode(mid: ListNode):
+    mid.val = mid.next.val
+    mid.next = mid.next.next
+
+
+
+###############################################################################
+###############################################################################
+
 # TEST CODE BELOW
 print(string_rotation("waterbottle", "wa"))
-

@@ -54,3 +54,9 @@ _
 # >>> age = 25
 # >>> f"Hello, {name}! You're {age} years old."
 # 'Hello, Jane! You're 25 years old.'
+
+# Corner Cases
+# Passing by reference
+d = [["C"] * 3] * 4
+d[1][2] = 8
+print(d)  # This will update all 2nd indices to 8
